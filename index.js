@@ -1,7 +1,7 @@
 const dns = require("node:dns");
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const cors = require("cors");
 const express = require("express");
 const dotenv = require("dotenv");
@@ -33,6 +33,14 @@ async function run() {
     app.get("/destinations", async (req, res) => {
       const destinations = await destinationsCollection.find().toArray();
       res.json(destinations);
+    });
+
+    app.get("/destination/:id", async (req, res) => {
+      const { id } = req.params;
+      const result = await destinationsCollection.findOne({
+        _id: new ObjectId(id),
+      });
+      res.json(result);
     });
 
     app.post("/destination", async (req, res) => {
