@@ -2,7 +2,7 @@ const dns = require("node:dns");
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const { MongoClient, ServerApiVersion } = require("mongodb");
-const cors = require('cors');
+const cors = require("cors");
 const express = require("express");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -29,6 +29,11 @@ async function run() {
 
     const db = client.db("wanderlast");
     const destinationsCollection = db.collection("destinations");
+
+    app.get("/destinations", async (req, res) => {
+      const destinations = await destinationsCollection.find().toArray();
+      res.json(destinations);
+    });
 
     app.post("/destination", async (req, res) => {
       const destination = req.body;
