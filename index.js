@@ -70,12 +70,18 @@ async function run() {
       res.json(result);
     });
 
-    app.post("/booking", async(req, res)=>{
+    app.get("/booking/:userId", async (req, res) => {
+      const { userId } = req.params;
+      const result = await bookingCollection.find({ userId }).toArray();
+      res.json(result);
+    });
+
+    app.post("/booking", async (req, res) => {
       const bookingData = req.body;
       // console.log("booking", bookingData);
       const result = await bookingCollection.insertOne(bookingData);
       res.json(result);
-    })
+    });
 
     await client.db("admin").command({ ping: 1 });
     console.log(
@@ -93,4 +99,3 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log("Server is running");
 });
-
