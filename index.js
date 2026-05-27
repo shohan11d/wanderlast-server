@@ -29,6 +29,7 @@ async function run() {
 
     const db = client.db("wanderlast");
     const destinationsCollection = db.collection("destinations");
+    const bookingCollection = db.collection("bookings");
 
     app.get("/destinations", async (req, res) => {
       const destinations = await destinationsCollection.find().toArray();
@@ -68,6 +69,13 @@ async function run() {
       });
       res.json(result);
     });
+
+    app.post("/booking", async(req, res)=>{
+      const bookingData = req.body;
+      // console.log("booking", bookingData);
+      const result = await bookingCollection.insertOne(bookingData);
+      res.json(result);
+    })
 
     await client.db("admin").command({ ping: 1 });
     console.log(
