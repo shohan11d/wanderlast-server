@@ -38,7 +38,7 @@ async function run() {
 
     app.get("/destination/:id", (req, res, next)=>{
       const header = req.headers.authorization;
-      console.log("yoyo",header);
+      console.log(header);
       if (header === "logged in") {
         next();
       } else {
