@@ -24,9 +24,9 @@ const client = new MongoClient(uri, {
   },
 });
 
-
-const JWKS = createRemoteJWKSet(new URL(`${process.env.CLIENT_URL}/api/auth/jwks`));
-
+const JWKS = createRemoteJWKSet(
+  new URL(`${process.env.CLIENT_URL}/api/auth/jwks`),
+);
 
 const verifyToken = async (req, res, next) => {
   const authHeader = req?.headers.authorization;
@@ -51,27 +51,31 @@ async function run() {
   try {
     // await client.connect();
 
-    const db = client.db("wanderlast");
-    const destinationsCollection = db.collection("destinations");
+    const db = client.db("find-tutor");
+    const tutorsCollection = db.collection("tutors");
     const bookingCollection = db.collection("bookings");
 
-    app.get("/destinations", async (req, res) => {
-      const destinations = await destinationsCollection.find().toArray();
-      res.json(destinations);
+    app.get("/tutors", async (req, res) => {
+      const tutors = await tutorsCollection.find().toArray();
+      res.json(tutors);
     });
 
-    app.get("/destination/:id", verifyToken, async (req, res) => {
+    app.get("/tutors/3", async (req, res) => {
+      const tutors = await tutorsCollection.find().limit(3).toArray();
+      res.json(tutors);
+    });
+
+    app.get("/tutors/:id", verifyToken, async (req, res) => {
       const { id } = req.params;
-      const result = await destinationsCollection.findOne({
+      const result = await tutorsCollection.findOne({
         _id: new ObjectId(id),
       });
       res.json(result);
     });
 
-    app.post("/destination", async (req, res) => {
-      const destination = req.body;
-      console.log("destination", destination);
-      const result = await destinationsCollection.insertOne(destination);
+    app.post("/tutor", async (req, res) => {
+      const tutor = req.body;
+      const result = await tutorsCollection.insertOne(tutor);
       res.json(result);
     });
 
@@ -79,7 +83,7 @@ async function run() {
       const { id } = req.params;
       const updatedData = req.body;
       console.log(updatedData);
-      const result = await destinationsCollection.updateOne(
+      const result = await tutorsCollection.updateOne(
         { _id: new ObjectId(id) },
         { $set: updatedData },
       );
@@ -88,15 +92,17 @@ async function run() {
 
     app.delete("/destination/:id", async (req, res) => {
       const { id } = req.params;
-      const result = await destinationsCollection.deleteOne({
+      const result = await tutorsCollection.deleteOne({
         _id: new ObjectId(id),
       });
       res.json(result);
     });
 
-    app.get("/booking/:userId", async (req, res) => {
-      const { userId } = req.params;
-      const result = await bookingCollection.find({ userId }).toArray();
+    app.get("/booking/:id", async (req, res) => {
+      const { id } = req.params;
+      console.log("id", id);
+      const result = await bookingCollection.find({ studentId: id }).toArray();
+      console.log(result);
       res.json(result);
     });
 
@@ -104,10 +110,18 @@ async function run() {
       const bookingData = req.body;
       // console.log("booking", bookingData);
       const result = await bookingCollection.insertOne(bookingData);
+      console.log(result);
       res.json(result);
     });
 
-      app.delete("/booking/:bookingId", verifyToken, async (req, res) => {
+    app.post("/student", verifyToken, async (req, res) => {
+      const bookingData = req.body;
+      console.log("student", bookingData);
+      const result = await bookingCollection.insertOne(bookingData);
+      res.json(result);
+    });
+
+    app.delete("/booking/:bookingId", verifyToken, async (req, res) => {
       const { bookingId } = req.params;
       const result = await bookingCollection.deleteOne({
         _id: new ObjectId(bookingId),
