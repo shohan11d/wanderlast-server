@@ -3,7 +3,6 @@
 MediQueue is a dynamic tutor scheduling web application where students can seamlessly discover tutors, filter classes by subject or availability, and book online learning sessions with auto-generated session tokens. The system automates real-time slot tracking and provides comprehensive dashboard management tools for both students and tutors.
 
 **🔗 [Live Site Deployment Link](https://your-live-site-url.com)**
-
 ---
 
 ## ✨ Key Features
