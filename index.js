@@ -61,7 +61,7 @@ async function run() {
     });
 
     app.get("/tutors/3", async (req, res) => {
-      const tutors = await tutorsCollection.find().limit(3).toArray();
+      const tutors = await tutorsCollection.find().limit(6).toArray();
       res.json(tutors);
     });
 
@@ -79,7 +79,7 @@ async function run() {
       res.json(result);
     });
 
-    app.patch("/destination/:id", async (req, res) => {
+    app.patch("/tutorUpdate/:id", async (req, res) => {
       const { id } = req.params;
       const updatedData = req.body;
       console.log(updatedData);
@@ -88,6 +88,22 @@ async function run() {
         { $set: updatedData },
       );
       res.json(result);
+    });
+
+    app.patch("/tutor/:id", async (req, res) => {
+      const id = req.params.id;
+
+      const result = await tutorsCollection.updateOne(
+        {
+          _id: new ObjectId(id),
+          slot: { $gt: 0 },
+        },
+        {
+          $inc: { slot: -1 },
+        },
+      );
+
+      res.send(result);
     });
 
     app.delete("/destination/:id", async (req, res) => {
