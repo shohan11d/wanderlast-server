@@ -5,7 +5,7 @@ MediQueue is a dynamic tutor scheduling web application where students can seaml
 **🔗 [Live Site Deployment Link](https://your-live-site-url.com)**
 ---
 
-## ✨ Key Features
+## ✨ Key Feature
 
 * **⚡ Real-Time Atomic Slot Reservation:** Features smart, database-driven allocation logic that automatically decreases tutor slot availability upon successful checkout and prevents booking when limits reach zero.
 * **🌓 Seamless Dark & Light Mode:** Includes a responsive site-wide theme context provider accessible right from the navbar, perfectly synchronizing your browsing layout to match your workspace preference.
